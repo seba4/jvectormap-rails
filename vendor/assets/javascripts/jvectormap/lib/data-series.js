@@ -9,7 +9,7 @@
  * @param {Number} params.min Minimum value of the data set. Could be calculated automatically if not provided.
  * @param {Number} params.min Maximum value of the data set. Could be calculated automatically if not provided.
  */
-jvm.DataSeries = function(params, elements) {
+jvm.DataSeries = function(params, elements, map) {
   var scaleConstructor;
 
   params = params || {};
@@ -17,6 +17,7 @@ jvm.DataSeries = function(params, elements) {
 
   this.elements = elements;
   this.params = params;
+  this.map = map;
 
   if (params.attributes) {
     this.setAttributes(params.attributes);
@@ -33,6 +34,13 @@ jvm.DataSeries = function(params, elements) {
 
   this.values = params.values || {};
   this.setValues(this.values);
+
+  if (this.params.legend) {
+    this.legend = new jvm.Legend($.extend({
+      map: this.map,
+      series: this
+    }, this.params.legend))
+  }
 };
 
 jvm.DataSeries.prototype = {
@@ -58,34 +66,45 @@ jvm.DataSeries.prototype = {
    * @param {Object} values Object which maps codes of regions or markers to values.
    */
   setValues: function(values) {
-    var max = Number.MIN_VALUE,
+    var max = -Number.MAX_VALUE,
         min = Number.MAX_VALUE,
         val,
         cc,
         attrs = {};
 
     if (!(this.scale instanceof jvm.OrdinalScale) && !(this.scale instanceof jvm.SimpleScale)) {
-      if (!this.params.min || !this.params.max) {
+      // we have a color scale as an array
+      if (typeof this.params.min === 'undefined' || typeof this.params.max === 'undefined') {
+        // min and/or max are not defined, so calculate them
         for (cc in values) {
           val = parseFloat(values[cc]);
-          if (val > max) max = values[cc];
+          if (val > max) max = val;
           if (val < min) min = val;
         }
-        if (!this.params.min) {
-          this.scale.setMin(min);
-        }
-        if (!this.params.max) {
-          this.scale.setMax(max);
-        }
-        this.params.min = min;
-        this.params.max = max;
       }
+
+      if (typeof this.params.min === 'undefined') {
+        this.scale.setMin(min);
+        this.params.min = min;
+      } else {
+        this.scale.setMin(this.params.min);
+      }
+
+      if (typeof this.params.max === 'undefined') {
+        this.scale.setMax(max);
+        this.params.max = max;
+      } else {
+        this.scale.setMax(this.params.max);
+      }
+
       for (cc in values) {
-        val = parseFloat(values[cc]);
-        if (!isNaN(val)) {
-          attrs[cc] = this.scale.getValue(val);
-        } else {
-          attrs[cc] = this.elements[cc].element.style.initial[this.params.attribute];
+        if (cc != 'indexOf') {
+          val = parseFloat(values[cc]);
+          if (!isNaN(val)) {
+            attrs[cc] = this.scale.getValue(val);
+          } else {
+            attrs[cc] = this.elements[cc].element.style.initial[this.params.attribute];
+          }
         }
       }
     } else {
@@ -108,7 +127,7 @@ jvm.DataSeries.prototype = {
 
     for (key in this.values) {
       if (this.elements[key]) {
-        attrs[key] = this.elements[key].element.style.initial[this.params.attribute];
+        attrs[key] = this.elements[key].element.shape.style.initial[this.params.attribute];
       }
     }
     this.setAttributes(attrs);

@@ -1,13 +1,15 @@
 jvectormap-rails
 ================
 
+## This Gem was originaly created by @camertron
+
 [jVectorMap](http://jvectormap.com/) for the Rails asset pipeline
 
 ### Installation
 
 Add it to your `Gemfile`:
 ```
-gem 'jvectormap-rails', '~> 1.0.0'
+gem 'jvectormap-rails', :git => 'https://github.com/seba4/jvectormap-rails.git'
 ```
 
 ### Usage

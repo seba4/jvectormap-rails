@@ -1,5 +1,7 @@
 //= require jvectormap/jquery-jvectormap.js
 //= require jvectormap/jquery-mousewheel.js
+
+
 //= require jvectormap/lib/jvectormap.js
 //= require jvectormap/lib/abstract-element.js
 //= require jvectormap/lib/abstract-canvas-element.js
@@ -24,3 +26,12 @@
 //= require jvectormap/lib/data-series.js
 //= require jvectormap/lib/proj.js
 //= require jvectormap/lib/world-map.js
+//= require jvectormap/lib/legend.js
+//= require jvectormap/lib/map.js
+//= require jvectormap/lib/map-object.js
+//= require jvectormap/lib/marker.js
+//= require jvectormap/lib/multimap.js
+//= require jvectormap/lib/region.js
+//= require jvectormap/lib/svg-image-element.js
+//= require jvectormap/lib/svg-text-element.js
+//= require jvectormap/lib/vml-image-element.js

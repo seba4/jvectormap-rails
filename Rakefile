@@ -26,8 +26,9 @@ task :download_maps do
   js_files.uniq.each do |file|
     puts "Downloading map #{File.basename(file)}..."
     map_data = open(File.join("http://jvectormap.com", file)).read
-    save_name = map_data.scan(/\$\.fn\.vectorMap\('addMap',\s'([\w_\-]+)'/).flatten.first
-    File.open(File.join(output_dir, "assets/javascripts/jvectormap/maps", "#{save_name}.js"), "w+") do |f|
+    save_name = map_data.scan(/\jQuery\.fn\.vectorMap\('addMap',\s'([\w_\-]+)'/).flatten.first
+    save_folder = File.join(output_dir, "assets/javascripts/jvectormap/maps", "#{save_name}.js")
+    File.open(save_folder, "w+") do |f|
       f.write(map_data)
     end
   end
