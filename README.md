@@ -9,7 +9,7 @@ jvectormap-rails
 
 Add it to your `Gemfile`:
 ```
-gem 'jvectormap-rails', :git => 'https://github.com/seba4/jvectormap-rails.git'
+gem 'jvectormap-rails', :git => 'https://github.com/seba4/jvectormap-rails.git', tag: "2.0.1"
 ```
 
 ### Usage
